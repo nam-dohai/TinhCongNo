@@ -1,6 +1,8 @@
 package com.example.tinhcongno.adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -8,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.tinhcongno.ListenerButtonChangeClick;
@@ -26,12 +30,14 @@ public class DonHangAdapter extends BaseAdapter {
     private ArrayList<DonHang> arrayDonHang;
     private ListenerDataChange listener;
     private DataSource dataSource;
+    private Context context;
 
     ArrayList<ListenerButtonChangeClick> arrayListener = new ArrayList<>();
     private ListenerButtonChangeClick listenerButtonChangeClick;
 
-    public DonHangAdapter(Activity activity, ArrayList<DonHang> arrayDonHang, ListenerDataChange listener,DataSource dataSource){
+    public DonHangAdapter(Context context, Activity activity, ArrayList<DonHang> arrayDonHang, ListenerDataChange listener,DataSource dataSource){
         this.activity = activity;
+        this.context = context;
         this.arrayDonHang = arrayDonHang;
         this.listener = listener;
         this.dataSource = dataSource;
@@ -63,6 +69,7 @@ public class DonHangAdapter extends BaseAdapter {
         EditText edittextMatHang = (EditText)view.findViewById(R.id.edittextMatHang);
         EditText edittextSoLuong = (EditText)view.findViewById(R.id.edittextSoLuong);
         EditText edittextMenhGia = (EditText)view.findViewById(R.id.edittextMenhGia);
+        ImageButton btnDonHangDelete = (ImageButton)view.findViewById(R.id.btnDonHangDelete);
 
         DonHang donHang = arrayDonHang.get(position);
         edittextMatHang.setText(donHang.getMatHang().getName());
@@ -146,6 +153,12 @@ public class DonHangAdapter extends BaseAdapter {
                 arrayListener.add(listenerButtonChangeClick); //Lưu các thay đổi chờ xử lí
             }
         });
+        btnDonHangDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenDialogDelete(donHang);
+            }
+        });
         return view;
     }
     public ArrayList<ListenerButtonChangeClick> getArrayListener(){
@@ -154,5 +167,29 @@ public class DonHangAdapter extends BaseAdapter {
     public void deleteArrayListener(){
         this.arrayListener = null;
         this.arrayListener = new ArrayList<>();
+    }
+    void OpenDialogDelete(DonHang donHang){
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_delete_items);
+        Button btnDeleteItem = (Button)dialog.findViewById(R.id.btnDeleteItem);
+        Button btnDeleteDismiss = (Button)dialog.findViewById(R.id.btnDeleteDismiss);
+
+        btnDeleteDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnDeleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataSource.removeDonHangFromCongNo(donHang);
+                arrayDonHang.remove(donHang);
+                notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

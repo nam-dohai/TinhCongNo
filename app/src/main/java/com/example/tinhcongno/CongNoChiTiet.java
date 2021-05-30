@@ -82,16 +82,9 @@ public class CongNoChiTiet extends AppCompatActivity {
 
         arrayDonHang = dataSource.getArrayDonHang(ngayThang,congTy);
 
-        adapterDonHang = new DonHangAdapter(this,arrayDonHang,listener,dataSource);
+        adapterDonHang = new DonHangAdapter(this,this,arrayDonHang,listener,dataSource);
         listDonHang.setAdapter(adapterDonHang);
 
-        listDonHang.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                OpenDialogDelete(position);
-                return false;
-            }
-        });
 
         btnXuatFileExcel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,28 +146,5 @@ public class CongNoChiTiet extends AppCompatActivity {
             }
         }
     }
-    void OpenDialogDelete(int position){
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_delete_items);
-        Button btnDeleteItem = (Button)dialog.findViewById(R.id.btnDeleteItem);
-        Button btnDeleteDismiss = (Button)dialog.findViewById(R.id.btnDeleteDismiss);
 
-        btnDeleteDismiss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        btnDeleteItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dataSource.removeDonHangFromCongNo(arrayDonHang.get(position));
-                arrayDonHang.remove(position);
-                adapterDonHang.notifyDataSetChanged();
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
 }

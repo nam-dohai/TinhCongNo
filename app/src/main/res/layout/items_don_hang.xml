@@ -6,21 +6,27 @@
     android:weightSum="10"
     android:padding="10dp">
     <EditText
-        android:layout_width="220dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/edittextMatHang"
         android:layout_weight="5"/>
     <EditText
-        android:layout_width="70dp"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:id="@+id/edittextSoLuong"
         android:layout_weight="2"
         android:layout_marginLeft="10dp"/>
     <EditText
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:id="@+id/edittextMenhGia"
         android:layout_weight="3"
         android:layout_marginLeft="10dp"/>
-
+    <ImageButton
+        android:id="@+id/btnDonHangDelete"
+        android:scaleType="fitXY"
+        android:src="@drawable/recycle_bin"
+        android:layout_marginLeft="20dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
 </LinearLayout>

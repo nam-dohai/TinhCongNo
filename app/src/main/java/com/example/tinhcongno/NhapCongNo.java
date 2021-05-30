@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tinhcongno.database.DataSource;
+import com.example.tinhcongno.database.SQLiteHelper;
 import com.example.tinhcongno.model.DonHang;
 import com.example.tinhcongno.model.MatHang;
 
@@ -196,6 +197,21 @@ public class NhapCongNo extends AppCompatActivity {
         if (menhGia.equals("")){
             Toast.makeText(this,"Chưa nhập Mệnh giá",Toast.LENGTH_LONG).show();
             return;
+        }
+
+        if (hashMap.get(matHang) != null){
+            if (hashMap.get(matHang).toString() != menhGia){
+                int i = arrayNameMatHang.indexOf(matHang);
+                MatHang mh = arrayMatHang.get(i);
+                hashMap.replace(matHang,Float.parseFloat(menhGia));
+                dataSource.updateDataToBaoGia(menhGia,mh, SQLiteHelper.COLUMN_MENH_GIA);
+            }
+        }
+        else{
+            MatHang mh = new MatHang(matHang,Float.parseFloat(menhGia));
+            arrayMatHang.add(mh);
+            CreateAutoTextView();
+            dataSource.addMatHangToBaoGia(mh);
         }
         MatHang hang = new MatHang(matHang,Float.parseFloat(menhGia));
         DonHang donHang = new DonHang(hang,Float.parseFloat(soLuong),congTy,ngayThang);

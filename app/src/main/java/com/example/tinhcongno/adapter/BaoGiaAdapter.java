@@ -1,14 +1,19 @@
 package com.example.tinhcongno.adapter;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
+import com.example.tinhcongno.BaoGiaActivity;
 import com.example.tinhcongno.ListenerButtonChangeClick;
 import com.example.tinhcongno.ListenerDataChange;
 import com.example.tinhcongno.R;
@@ -23,14 +28,16 @@ public class BaoGiaAdapter extends BaseAdapter {
     private Activity activity;
     private ListenerDataChange listener;
     private DataSource dataSource;
+    private Context context;
     private ArrayList<ListenerButtonChangeClick> arrayListener = new ArrayList<>();
     private ListenerButtonChangeClick listenerDataChange;
 
-    public BaoGiaAdapter(Activity activity, ArrayList<MatHang> arrayMatHang, ListenerDataChange listener, DataSource dataSource) {
+    public BaoGiaAdapter(Context context, Activity activity, ArrayList<MatHang> arrayMatHang, ListenerDataChange listener, DataSource dataSource) {
         this.arrayMatHang = arrayMatHang;
         this.activity = activity;
         this.listener = listener;
         this.dataSource = dataSource;
+        this.context = context;
     }
 
     @Override
@@ -57,6 +64,7 @@ public class BaoGiaAdapter extends BaseAdapter {
 
         EditText edtBaoGiaMatHang = (EditText)view.findViewById(R.id.edtBaoGiaMatHang);
         EditText edtBaoGiaMenhGia = (EditText)view.findViewById(R.id.edtBaoGiaMenhGia);
+        ImageButton btnBaoGiaDelete = (ImageButton)view.findViewById(R.id.btnBaoGiaDelete);
 
         MatHang matHang = arrayMatHang.get(position);
         edtBaoGiaMatHang.setText(matHang.getName());
@@ -113,6 +121,13 @@ public class BaoGiaAdapter extends BaseAdapter {
                 arrayListener.add(listenerDataChange); //Lưu các thay đổi vào vào array chờ xử lí
             }
         });
+
+        btnBaoGiaDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenDialogDelete(matHang);
+            }
+        });
         return view;
     }
     public ArrayList<ListenerButtonChangeClick> getArrayListener(){
@@ -125,5 +140,29 @@ public class BaoGiaAdapter extends BaseAdapter {
     public void searchList(ArrayList<MatHang> array){
         arrayMatHang = array;
         notifyDataSetChanged();
+    }
+    void OpenDialogDelete(MatHang matHang){
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_delete_items);
+        Button btnDeleteItem = (Button)dialog.findViewById(R.id.btnDeleteItem);
+        Button btnDeleteDismiss = (Button)dialog.findViewById(R.id.btnDeleteDismiss);
+
+        btnDeleteDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnDeleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataSource.removeMatHangFromBaoGia(matHang);
+                arrayMatHang.remove(matHang);
+                notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

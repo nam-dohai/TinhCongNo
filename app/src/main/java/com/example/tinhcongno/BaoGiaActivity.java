@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.tinhcongno.adapter.BaoGiaAdapter;
@@ -43,7 +44,7 @@ public class BaoGiaActivity extends AppCompatActivity {
         dataSource.open();
 
         arrayMatHang = dataSource.getAllMatHangFromBaoGia();
-        adapter = new BaoGiaAdapter(this,arrayMatHang, listener, dataSource);
+        adapter = new BaoGiaAdapter(this,this,arrayMatHang, listener, dataSource);
         listBaoGia.setAdapter(adapter);
 
         btnBaoGiaSaveChange.setOnClickListener(new View.OnClickListener() {
@@ -83,14 +84,6 @@ public class BaoGiaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 openDialog();
 
-            }
-        });
-
-        listBaoGia.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                OpenDialogDelete(position);
-                return false;
             }
         });
     }
@@ -138,28 +131,5 @@ public class BaoGiaActivity extends AppCompatActivity {
         });
         dialog.show();
     }
-    void OpenDialogDelete(int position){
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_delete_items);
-        Button btnDeleteItem = (Button)dialog.findViewById(R.id.btnDeleteItem);
-        Button btnDeleteDismiss = (Button)dialog.findViewById(R.id.btnDeleteDismiss);
 
-        btnDeleteDismiss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        btnDeleteItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dataSource.removeMatHangFromBaoGia(arrayMatHang.get(position));
-                arrayMatHang.remove(position);
-                adapter.notifyDataSetChanged();
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
 }

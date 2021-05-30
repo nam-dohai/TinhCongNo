@@ -5,10 +5,18 @@
     android:layout_height="wrap_content">
     <EditText
         android:id="@+id/edtBaoGiaMatHang"
-        android:layout_width="260dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"/>
     <EditText
+        android:layout_marginLeft="30dp"
         android:id="@+id/edtBaoGiaMenhGia"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"/>
+    <ImageButton
+        android:id="@+id/btnBaoGiaDelete"
+        android:scaleType="fitXY"
+        android:src="@drawable/recycle_bin"
+        android:layout_marginLeft="20dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
 </LinearLayout>
