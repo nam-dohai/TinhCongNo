@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BaoGiaActivity"
+    android:orientation="vertical">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edtSearch"/>
+    <ListView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="460dp"
+        android:id="@+id/listBaoGia"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <Button
+            android:text="Lưu thay đổi"
+            android:clickable="false"
+            android:layout_gravity="center"
+            android:id="@+id/btnBaoGiaSaveChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_marginLeft="30dp"
+            android:text="Thêm mặt hàng"
+            android:layout_gravity="center"
+            android:id="@+id/btnAddMatHang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

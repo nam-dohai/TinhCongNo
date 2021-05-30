@@ -1,10 +1,15 @@
 package com.example.tinhcongno;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -13,9 +18,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.tinhcongno.adapter.DonHangAdapter;
 import com.example.tinhcongno.database.DataSource;
 import com.example.tinhcongno.model.DonHang;
+import com.example.tinhcongno.model.MatHang;
 
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
@@ -66,6 +73,10 @@ public class CongNoChiTiet extends AppCompatActivity {
         String ngayThang = intent.getStringExtra("ngaythang");
         String congTy = intent.getStringExtra("congty");
 
+        if (ngayThang.equals("") || congTy.equals("")){
+            Toast.makeText(this,"Chưa nhập dữ liệu",Toast.LENGTH_LONG).show();
+        }
+
         txtCongTy.setText(congTy);
         txtNgayThang.setText(ngayThang);
 
@@ -73,6 +84,14 @@ public class CongNoChiTiet extends AppCompatActivity {
 
         adapterDonHang = new DonHangAdapter(this,arrayDonHang,listener,dataSource);
         listDonHang.setAdapter(adapterDonHang);
+
+        listDonHang.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                OpenDialogDelete(position);
+                return false;
+            }
+        });
 
         btnXuatFileExcel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,16 +105,20 @@ public class CongNoChiTiet extends AppCompatActivity {
             public void onClick(View v) {
                 btnXuatFileExcel.setClickable(true);
                 btnSaveChange.setClickable(false);
+
+                //Lưu lại tất cả các thay đổi
                 ArrayList<ListenerButtonChangeClick> arrayListener = adapterDonHang.getArrayListener();
                 for (ListenerButtonChangeClick listen : arrayListener){
                     listen.listener();
                 }
-                adapterDonHang.deleteArrayListener();
+                adapterDonHang.deleteArrayListener(); //Xóa hết các thay đổi đã lưu
             }
         });
+
+
     }
     void AnhXa(){
-        listDonHang = (ListView)findViewById(R.id.listDonHang);
+        listDonHang = (ListView) findViewById(R.id.listDonHang);
         btnXuatFileExcel = (Button)findViewById(R.id.btnXuatFileExcel);
         txtCongTy = (TextView)findViewById(R.id.txtCongTy);
         txtNgayThang = (TextView)findViewById(R.id.txtNgayThang);
@@ -129,5 +152,29 @@ public class CongNoChiTiet extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+    void OpenDialogDelete(int position){
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_delete_items);
+        Button btnDeleteItem = (Button)dialog.findViewById(R.id.btnDeleteItem);
+        Button btnDeleteDismiss = (Button)dialog.findViewById(R.id.btnDeleteDismiss);
+
+        btnDeleteDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnDeleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataSource.removeDonHangFromCongNo(arrayDonHang.get(position));
+                arrayDonHang.remove(position);
+                adapterDonHang.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

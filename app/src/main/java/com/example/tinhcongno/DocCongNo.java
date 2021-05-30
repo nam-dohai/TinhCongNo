@@ -52,10 +52,13 @@ public class DocCongNo extends AppCompatActivity {
         AnhXa();
         dataSource = new DataSource(this);
         dataSource.open();
+
         arrayCongTy = dataSource.getAllCongTy();
+
         for (String s : arrayCongTy){
             arrayNgayThang.put(s,dataSource.getAllNgayThangByCongTy(s));
         }
+
         adapter = new ExpandableAdapterCongTy(arrayCongTy,arrayNgayThang);
         listView.setAdapter(adapter);
 

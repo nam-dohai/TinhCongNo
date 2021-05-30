@@ -42,7 +42,7 @@ import static android.os.Environment.DIRECTORY_DOCUMENTS;
 
 public class NhapCongNo extends AppCompatActivity {
 
-    Button btnCHuyen;
+    Button btnChuyen;
     Spinner spnChonCongTy;
     AutoCompleteTextView edtMatHang;
     EditText edtSoLuong;
@@ -57,11 +57,6 @@ public class NhapCongNo extends AppCompatActivity {
     ArrayList<String> arrayCongTy = new ArrayList<>();
     HashMap<String, Float> hashMap = new HashMap<>();
 
-    FileInputStream fis = null;
-    CellType cellType = CellType.STRING;
-    File fileInput = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS),"Báo giá.xls");
-
-
     DataSource dataSource;
 
     @Override
@@ -73,9 +68,11 @@ public class NhapCongNo extends AppCompatActivity {
         dataSource = new DataSource(this);
         dataSource.open();
         arrayMatHang = dataSource.getAllMatHangFromBaoGia();
+
         CreateSpinner();
         CreateAutoTextView();
 
+        //Chọn ngày tháng
         tvDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,21 +102,24 @@ public class NhapCongNo extends AppCompatActivity {
         btnNhap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Nhập hàng
                 WriteData();
             }
         });
 
-        btnCHuyen.setOnClickListener(new View.OnClickListener() {
+        btnChuyen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NhapCongNo.this, DocCongNo.class);
+                Intent intent = new Intent(NhapCongNo.this, CongNoChiTiet.class);
+                intent.putExtra("congty",spnChonCongTy.getSelectedItem().toString());
+                intent.putExtra("ngaythang",tvDate.getText());
                 startActivity(intent);
             }
         });
     }
 
     void AnhXa(){
-        btnCHuyen = (Button)findViewById(R.id.btnChuyen);
+        btnChuyen = (Button)findViewById(R.id.btnChuyen);
         spnChonCongTy = (Spinner)findViewById(R.id.spnChonCongTy);
         edtMatHang = (AutoCompleteTextView)findViewById(R.id.edtMatHang);
         edtMenhGia = (EditText)findViewById(R.id.edtMenhGia);
@@ -130,35 +130,6 @@ public class NhapCongNo extends AppCompatActivity {
         tvMatHangLichSu = (TextView)findViewById(R.id.tvMatHangLichSu);
         tvSoLuongLichSu = (TextView)findViewById(R.id.tvSoLuongLichSu);
         tvMenhGiaLichSu = (TextView)findViewById(R.id.tvMenhGiaLichSu);
-    }
-    private void ReadFile(){
-        try {
-            fis = new FileInputStream(fileInput);
-            HSSFWorkbook workbook = new HSSFWorkbook(fis);
-            Sheet sheet = workbook.getSheetAt(0);
-            Iterator<Row> rowIterator = sheet.rowIterator();
-            while (rowIterator.hasNext()){
-                Row row = rowIterator.next();
-
-                Cell cell0 = row.getCell(0);
-                Cell cell1 = row.getCell(1);
-
-                cell0.setCellType(cellType);
-                cell1.setCellType(cellType);
-                String MatHang = cell0.getStringCellValue();
-                String MenhGiaString = cell1.getStringCellValue();
-                if (!MenhGiaString.equals("")){
-                    float MenhGia = Float.parseFloat(MenhGiaString);
-                    MatHang matHang = new MatHang(MatHang,MenhGia);
-                    dataSource.addMatHangToBaoGia(matHang);
-                }
-            }
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void CreateSpinner(){

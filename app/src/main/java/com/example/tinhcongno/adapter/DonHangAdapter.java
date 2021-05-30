@@ -86,12 +86,12 @@ public class DonHangAdapter extends BaseAdapter {
                 listenerButtonChangeClick = new ListenerButtonChangeClick() {
                     @Override
                     public void listener() {
-                        dataSource.updateData(s.toString(),donHang, SQLiteHelper.COLUMN_MAT_HANG);
+                        dataSource.updateDataToCongNo(s.toString(),donHang, SQLiteHelper.COLUMN_MAT_HANG);
                         donHang.getMatHang().setName(s.toString());
                         notifyDataSetChanged();
                     }
                 };
-                arrayListener.add(listenerButtonChangeClick);
+                arrayListener.add(listenerButtonChangeClick); //Lưu các thay đổi chờ xử lí
             }
         });
 
@@ -112,12 +112,12 @@ public class DonHangAdapter extends BaseAdapter {
                 listenerButtonChangeClick = new ListenerButtonChangeClick() {
                     @Override
                     public void listener() {
-                        dataSource.updateData(s.toString(),donHang, SQLiteHelper.COLUMN_SO_LUONG);
+                        dataSource.updateDataToCongNo(s.toString(),donHang, SQLiteHelper.COLUMN_SO_LUONG);
                         donHang.setSoLuong(Float.parseFloat(s.toString()));
                         notifyDataSetChanged();
                     }
                 };
-                arrayListener.add(listenerButtonChangeClick);
+                arrayListener.add(listenerButtonChangeClick); //Lưu các thay đổi chờ xử lí
             }
         });
 
@@ -138,12 +138,12 @@ public class DonHangAdapter extends BaseAdapter {
                 listenerButtonChangeClick = new ListenerButtonChangeClick() {
                     @Override
                     public void listener() {
-                        dataSource.updateData(s.toString(),donHang, SQLiteHelper.COLUMN_MENH_GIA);
+                        dataSource.updateDataToCongNo(s.toString(),donHang, SQLiteHelper.COLUMN_MENH_GIA);
                         donHang.getMatHang().setMenhGia(Float.parseFloat(s.toString()));
                         notifyDataSetChanged();
                     }
                 };
-                arrayListener.add(listenerButtonChangeClick);
+                arrayListener.add(listenerButtonChangeClick); //Lưu các thay đổi chờ xử lí
             }
         });
         return view;

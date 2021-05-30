@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MenuActivity extends AppCompatActivity {
-    Button btnNhapMoi, btnXemCongNo;
+    Button btnNhapMoi, btnXemCongNo, btnXemBaoGia;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,10 +29,18 @@ public class MenuActivity extends AppCompatActivity {
                 OpenReadActivity();
             }
         });
+
+        btnXemBaoGia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenBaoGiaActivity();
+            }
+        });
     }
     void AnhXa(){
         btnNhapMoi = (Button)findViewById(R.id.btnNhapMoi);
         btnXemCongNo = (Button)findViewById(R.id.btnXemCongNo);
+        btnXemBaoGia = (Button)findViewById(R.id.btnXemBaoGia);
     }
 
     void OpenWriteActivity(){
@@ -42,6 +50,10 @@ public class MenuActivity extends AppCompatActivity {
 
     void OpenReadActivity(){
         Intent intent = new Intent(MenuActivity.this,DocCongNo.class);
+        startActivity(intent);
+    }
+    void OpenBaoGiaActivity(){
+        Intent intent = new Intent(MenuActivity.this,BaoGiaActivity.class);
         startActivity(intent);
     }
 }

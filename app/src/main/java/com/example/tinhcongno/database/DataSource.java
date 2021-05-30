@@ -124,10 +124,32 @@ public class DataSource {
         return arrayDonHang;
     }
 
-    public void updateData(String s, DonHang donHang, String key){
+    public void updateDataToCongNo(String s, DonHang donHang, String key){
         ContentValues values = new ContentValues();
         values.put(key,s);
-        Log.e("AAA",SQLiteHelper.COLUMN_ID + " = \""+ donHang.getId()+ "\"");
         database.update(SQLiteHelper.TABLE_CONG_NO,values,SQLiteHelper.COLUMN_ID + " = \""+ donHang.getId()+ "\"" ,null);
+    }
+
+    public void updateDataToBaoGia(String s, MatHang matHang, String key){
+        ContentValues values = new ContentValues();
+        values.put(key,s);
+        database.update(SQLiteHelper.TABLE_BAO_GIA,values, SQLiteHelper.COLUMN_ID + " = \""+ matHang.getId()+ "\"" ,null);
+    }
+
+    public MatHang getLastMatHangFromBaoGia(){
+        Cursor cursor = database.query(SQLiteHelper.TABLE_BAO_GIA, new String[]{SQLiteHelper.COLUMN_MAT_HANG, SQLiteHelper.COLUMN_MENH_GIA},null,null,null,null,null);
+        cursor.moveToLast();
+        MatHang matHang = new MatHang();
+        matHang.setName(cursor.getString(0));
+        matHang.setMenhGia(cursor.getFloat(1));
+        return matHang;
+    }
+
+    public void removeDonHangFromCongNo(DonHang donHang){
+        database.delete(SQLiteHelper.TABLE_CONG_NO,SQLiteHelper.COLUMN_ID + " = \"" + donHang.getId() + "\"",null);
+    }
+
+    public void removeMatHangFromBaoGia(MatHang matHang){
+        database.delete(SQLiteHelper.TABLE_BAO_GIA,SQLiteHelper.COLUMN_ID + " = \"" + matHang.getId() + "\"",null);
     }
 }
